@@ -1,0 +1,920 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>DISCOUNT</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: sticky app bar, content in a 1160px column; hero pairs search with a live "price stack" card that shows the final-price formula. */
+:root{
+  --bg:#F4F6FB; --surface:#FFFFFF; --surface2:#EBEFF8; --fg:#0D1A36; --muted:#56637F; --line:#D9E0EE;
+  --brand:#0B2F7C; --on-brand:#FFFFFF; --brand-soft:#E1E9FF; --link:#0B2F7C;
+  --purple:#6A3FD0; --purple-soft:#ECE6FC;
+  --green:#0B8A4A; --green-soft:#DCF4E7;
+  --amber:#9A5B00; --amber-soft:#FFF0D2;
+  --red:#B42318; --red-soft:#FDE3E0;
+  --tile-l:93%; --glyph-l:38%;
+  --shadow:0 1px 2px rgba(13,26,54,.06),0 6px 18px rgba(13,26,54,.06);
+  --font-display:'Space Grotesk',system-ui,sans-serif; --font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A1022; --surface:#111A33; --surface2:#17224A; --fg:#E8EEFB; --muted:#9AA8C7; --line:#25335E;
+  --brand:#5A86FF; --on-brand:#06122E; --brand-soft:#1A2A5C; --link:#8FAEFF;
+  --purple:#B093FF; --purple-soft:#2A2158;
+  --green:#3FD58C; --green-soft:#12362A;
+  --amber:#F3B34B; --amber-soft:#3A2B10;
+  --red:#FF8A80; --red-soft:#3D1A1A;
+  --tile-l:20%; --glyph-l:70%;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.3); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1022; --surface:#111A33; --surface2:#17224A; --fg:#E8EEFB; --muted:#9AA8C7; --line:#25335E;
+  --brand:#5A86FF; --on-brand:#06122E; --brand-soft:#1A2A5C; --link:#8FAEFF;
+  --purple:#B093FF; --purple-soft:#2A2158;
+  --green:#3FD58C; --green-soft:#12362A;
+  --amber:#F3B34B; --amber-soft:#3A2B10;
+  --red:#FF8A80; --red-soft:#3D1A1A;
+  --tile-l:20%; --glyph-l:70%;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.3); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:1.15;letter-spacing:-.01em}
+h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:700}
+h2{font-size:1.5rem;font-weight:600} h3{font-size:1.1rem;font-weight:600} h4{font-size:.95rem;font-weight:600}
+p{margin:0}
+a{color:var(--link)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--purple);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1160px;margin:0 auto}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)} .small{font-size:.82rem}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.grow{flex:1;min-width:0}
+
+/* app bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);
+  margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+.bar .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--fg);font-family:var(--font-display);font-weight:700;font-size:1.2rem;letter-spacing:.04em}
+.logo svg{width:32px;height:32px;flex:none}
+.nav{display:flex;gap:4px;flex-wrap:wrap}
+.nav a{padding:7px 12px;border-radius:999px;text-decoration:none;color:var(--muted);font-weight:500}
+.nav a:hover{background:var(--surface2);color:var(--fg)}
+.nav a[aria-current="page"]{background:var(--brand-soft);color:var(--link)}
+.bar-search{flex:1;min-width:200px;max-width:420px;position:relative}
+.icon-btn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 12px;font-weight:500}
+.icon-btn:hover{background:var(--surface2)}
+
+/* demo notice */
+.demo-strip{background:var(--amber-soft);color:var(--amber);font-size:.82rem;text-align:center;padding:6px 16px;
+  margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)))}
+
+/* controls */
+.btn{border:1px solid transparent;background:var(--brand);color:var(--on-brand);border-radius:10px;padding:9px 16px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--link);border-color:var(--line)}
+.btn.ghost:hover{background:var(--surface2)}
+.btn.sm{padding:6px 11px;font-size:.85rem;border-radius:8px}
+.btn[disabled]{opacity:.55;cursor:not-allowed;filter:none}
+.field{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px}
+.field:focus-visible{outline-offset:0}
+label.lbl{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+
+/* chips & badges */
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:.85rem;font-weight:500}
+.chip:hover,.chip[aria-pressed="true"]{background:var(--brand-soft);border-color:var(--brand);color:var(--link)}
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:2px 9px;font-size:.72rem;font-weight:600;white-space:nowrap}
+.b-ok{background:var(--green-soft);color:var(--green)}
+.b-warn{background:var(--amber-soft);color:var(--amber)}
+.b-bad{background:var(--red-soft);color:var(--red)}
+.b-info{background:var(--brand-soft);color:var(--link)}
+.b-demo{background:var(--purple-soft);color:var(--purple)}
+
+/* surfaces */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.section{padding-block:36px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.g3{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+
+/* hero */
+.hero{padding-block:44px 28px;display:grid;grid-template-columns:1.15fr .85fr;gap:32px;align-items:center}
+.hero p.lead{font-size:1.1rem;color:var(--muted);max-width:52ch;margin-top:14px}
+.hero h1 em{font-style:normal;color:var(--green)}
+.search-big{display:flex;gap:8px;margin-top:24px;position:relative}
+.search-big .field{padding:15px 16px;font-size:1.05rem;border-radius:12px}
+.search-big .btn{padding-inline:22px;border-radius:12px}
+.suggest{position:absolute;left:0;right:0;top:100%;margin-top:6px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);z-index:15;overflow:hidden}
+.suggest button{display:flex;width:100%;text-align:left;gap:10px;align-items:center;padding:10px 14px;background:none;border:0;border-bottom:1px solid var(--line)}
+.suggest button:last-child{border-bottom:0}
+.suggest button:hover,.suggest button[aria-selected="true"]{background:var(--surface2)}
+.stack-card{padding:22px}
+.stack-line{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.stack-line.total{border-bottom:0;padding-top:14px;font-family:var(--font-display);font-size:1.5rem;font-weight:700}
+.stack-line .minus{color:var(--green)}
+@media(max-width:860px){.hero{grid-template-columns:1fr}}
+
+/* product tiles */
+.tile{width:100%;aspect-ratio:4/3;border-radius:12px;background:hsl(var(--h) 60% var(--tile-l));display:grid;place-items:center;color:hsl(var(--h) 55% var(--glyph-l))}
+.tile svg{width:52%;height:auto;max-height:82%}
+.pcard{display:flex;flex-direction:column;gap:10px;padding:14px;position:relative}
+.pcard h3{font-size:1rem}
+.pcard .price{font-family:var(--font-display);font-size:1.35rem;font-weight:700}
+.strike{text-decoration:line-through;color:var(--muted);font-size:.88rem}
+.off{color:var(--green);font-weight:600;font-size:.88rem}
+.pcard-actions{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap}
+.rating{font-size:.82rem;color:var(--muted)}
+.cat-card{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--line);background:var(--surface);border-radius:14px;text-align:left;width:100%}
+.cat-card:hover{background:var(--surface2)}
+.cat-card .ico{width:44px;height:44px;border-radius:10px;flex:none;display:grid;place-items:center;background:hsl(var(--h) 60% var(--tile-l));color:hsl(var(--h) 55% var(--glyph-l))}
+.cat-card svg{width:26px;height:26px}
+
+/* coupons / offers */
+.coupon{display:flex;flex-direction:column;gap:8px}
+.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;letter-spacing:.06em;border:1.5px dashed var(--brand);color:var(--link);border-radius:8px;padding:5px 10px;background:var(--brand-soft)}
+.coupon.expired{opacity:.6}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:.85rem}
+.kv dt{color:var(--muted)} .kv dd{margin:0}
+
+/* search layout */
+.search-layout{display:grid;grid-template-columns:250px 1fr;gap:24px;align-items:start;padding-block:28px}
+.filters{position:sticky;top:calc(env(safe-area-inset-top,0px) + 76px);display:flex;flex-direction:column;gap:16px}
+.checks label{display:flex;gap:8px;align-items:center;padding:3px 0;cursor:pointer}
+@media(max-width:820px){.search-layout{grid-template-columns:1fr}.filters{position:static}}
+
+/* product page */
+.pd-top{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:28px;padding-block:28px;align-items:start}
+@media(max-width:820px){.pd-top{grid-template-columns:1fr}}
+.pd-price{font-family:var(--font-display);font-size:2.2rem;font-weight:700}
+.subnav{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;font-size:.9rem}
+th{font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;white-space:nowrap}
+tr.best td{background:var(--green-soft)}
+.scroll-x{overflow-x:auto;max-width:100%}
+.stat{display:flex;flex-direction:column;gap:2px;padding:12px 14px;background:var(--surface2);border-radius:12px;min-width:0}
+.stat b{font-family:var(--font-display);font-size:1.2rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:14px}
+.chart-wrap{position:relative;margin-top:10px}
+.chart-wrap svg{width:100%;height:auto;display:block;touch-action:pan-y}
+.tip{position:absolute;pointer-events:none;background:var(--fg);color:var(--bg);padding:5px 9px;border-radius:8px;font-size:.8rem;white-space:nowrap;transform:translate(-50%,-110%);z-index:5}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:none;padding:6px 12px;font-weight:500;font-size:.85rem}
+.seg button[aria-pressed="true"]{background:var(--brand);color:var(--on-brand)}
+.calc-out{background:var(--surface2);border-radius:14px;padding:16px}
+.calc-out .stack-line:last-child{border-bottom:0}
+.note{font-size:.82rem;color:var(--muted);margin-top:8px}
+.warn-box{background:var(--amber-soft);color:var(--amber);border-radius:10px;padding:9px 12px;font-size:.85rem;margin-top:10px}
+
+/* how it works, extension, footer */
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.step{position:relative;padding:18px}
+.step::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--brand);color:var(--on-brand);font-weight:700;margin-bottom:10px;font-family:var(--font-display)}
+.ext{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center;background:var(--brand);color:var(--on-brand);border-radius:20px;padding:28px}
+.ext p,.ext li{opacity:.92}
+.ext .btn{background:var(--on-brand);color:var(--brand)}
+.ext .mini{background:rgba(255,255,255,.12);border-radius:14px;padding:16px}
+@media(max-width:760px){.ext{grid-template-columns:1fr}}
+footer{border-top:1px solid var(--line);margin-top:40px;padding-block:28px 40px;
+  margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:var(--surface)}
+footer .links{display:flex;gap:18px;flex-wrap:wrap}
+.empty{text-align:center;padding:36px 16px;border:1px dashed var(--line);border-radius:14px;color:var(--muted)}
+.toast-host{position:fixed;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:center;gap:8px;z-index:50;pointer-events:none;padding-inline:16px}
+.toast{background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;box-shadow:var(--shadow);max-width:min(520px,100%);animation:rise .2s ease-out}
+@keyframes rise{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.crumbs{padding-top:18px;font-size:.85rem}
+.skeleton{background:linear-gradient(90deg,var(--surface2),var(--line),var(--surface2));background-size:200% 100%;animation:sh 1.2s infinite;border-radius:10px;height:18px}
+@keyframes sh{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="logo" href="#home" aria-label="DISCOUNT home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--brand)"/><path d="M9 10.5h7.2c4.3 0 6.8 2.4 6.8 5.5s-2.5 5.5-6.8 5.5H9z" fill="none" stroke="var(--on-brand)" stroke-width="2.4" stroke-linejoin="round"/><path d="M16 24.5l5-4.5h-10z" fill="var(--green)" transform="translate(2 1.5)"/></svg>
+      DISCOUNT
+    </a>
+    <nav class="nav" id="nav" aria-label="Main"></nav>
+    <form class="bar-search" id="barSearch" role="search" autocomplete="off">
+      <label class="sr" for="barQ" style="position:absolute;left:-9999px">Search products</label>
+      <input class="field" id="barQ" placeholder="Search name, brand, model or URL" style="padding:8px 12px">
+    </form>
+    <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">Theme</button>
+  </div>
+</header>
+<div class="demo-strip" role="note"><b>Demo data.</b> Prices, coupons, bank offers and price history are generated samples for design and testing. Nothing here is a live price.</div>
+
+<main class="wrap" id="app" tabindex="-1"></main>
+
+<footer>
+  <div class="wrap">
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div style="max-width:34ch">
+        <div class="logo" style="margin-bottom:6px">DISCOUNT</div>
+        <p class="muted small">One Search. Every Store. Best Deal.<br>Compare prices, track history, find coupons and bank offers, and see the real amount you pay.</p>
+      </div>
+      <nav class="links" aria-label="Footer">
+        <a href="#page-about">About</a><a href="#page-contact">Contact</a><a href="#page-privacy">Privacy</a><a href="#page-terms">Terms</a><a href="#page-help">Help</a>
+      </nav>
+    </div>
+    <p class="muted small" style="margin-top:18px">Store names are used only to describe where a price would come from. DISCOUNT is not affiliated with any store or bank listed in this demo.</p>
+  </div>
+</footer>
+<div class="toast-host" id="toasts" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* ---------- helpers ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr = n => '₹' + Math.round(n).toLocaleString('en-IN');
+const store = { get(k, d){ try{ const v = localStorage.getItem('discount.'+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+                set(k, v){ try{ localStorage.setItem('discount.'+k, JSON.stringify(v)); }catch(e){} } };
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+const pd = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const fmtDate = d => d.toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
+const fmtShort = d => d.toLocaleDateString('en-IN', {day:'numeric', month:'short'});
+function toast(msg){ const el = document.createElement('div'); el.className='toast'; el.textContent=msg; $('#toasts').appendChild(el); setTimeout(()=>el.remove(), 3800); }
+function copyText(t, okMsg){
+  const done = () => toast(okMsg);
+  const fallback = () => { toast('Copy blocked here. Select and copy: ' + t); };
+  try{ navigator.clipboard.writeText(t).then(done, fallback); }catch(e){ fallback(); }
+}
+
+/* ---------- demo data ---------- */
+const STORES = { amazon:'Amazon India', flipkart:'Flipkart', meesho:'Meesho', myntra:'Myntra', croma:'Croma', reliance:'Reliance Digital' };
+const CATS = [
+  {n:'Mobiles', h:215}, {n:'Laptops', h:250}, {n:'Audio', h:285}, {n:'Wearables', h:160},
+  {n:'TVs', h:195}, {n:'Home', h:30}, {n:'Fashion', h:335}
+];
+const hueOf = c => (CATS.find(x=>x.n===c)||{h:210}).h;
+
+const PRODUCTS = [
+ {id:'nova-x5', name:'Nova X5 5G', brand:'Nova', model:'NX5-128', variant:'128 GB · Midnight Black', cat:'Mobiles', rating:4.3, list:24999, tracked:365, trend:1,
+  desc:'6.6 inch 120 Hz display, 5000 mAh battery and a 50 MP main camera.', specs:{Display:'6.6" AMOLED, 120 Hz',Memory:'8 GB RAM, 128 GB storage',Battery:'5000 mAh, 33 W charging',Camera:'50 MP + 8 MP'},
+  stores:{amazon:{price:21499,d:0,pdisc:0,stock:true}, flipkart:{price:20999,d:0,pdisc:250,stock:true}, croma:{price:22490,d:99,pdisc:0,stock:true}, reliance:{price:22990,d:0,pdisc:0,stock:true}}},
+ {id:'aria-pro-12', name:'Aria Pro 12', brand:'Aria', model:'AP12-256', variant:'256 GB · Glacier', cat:'Mobiles', rating:4.6, list:64999, tracked:365, trend:3,
+  desc:'Flagship phone with a 6.7 inch LTPO display, titanium frame and 5x optical zoom.', specs:{Display:'6.7" LTPO OLED, 1-120 Hz',Memory:'12 GB RAM, 256 GB storage',Battery:'4800 mAh, 45 W charging',Camera:'50 MP + 12 MP + 50 MP (5x)'},
+  stores:{amazon:{price:58990,d:0,pdisc:0,stock:true}, flipkart:{price:59499,d:0,pdisc:0,stock:true}, croma:{price:58490,d:0,pdisc:0,stock:true}, reliance:{price:59990,d:0,pdisc:0,stock:false}}},
+ {id:'vertex-book-14', name:'Vertex Book 14', brand:'Vertex', model:'VB14-I5', variant:'Core i5 · 16 GB · 512 GB SSD', cat:'Laptops', rating:4.2, list:69990, tracked:180, trend:5,
+  desc:'Lightweight 14 inch laptop with a 1.3 kg body and all-day battery.', specs:{Display:'14" FHD IPS, 300 nits',Processor:'Core i5, 12 cores',Memory:'16 GB RAM, 512 GB SSD',Weight:'1.3 kg'},
+  stores:{amazon:{price:57990,d:0,pdisc:0,stock:true}, flipkart:{price:58490,d:0,pdisc:500,stock:true}, croma:{price:59990,d:0,pdisc:0,stock:true}, reliance:{price:58990,d:0,pdisc:0,stock:true}}},
+ {id:'lumio-slim-15', name:'Lumio Slim 15', brand:'Lumio', model:'LS15-R7', variant:'Ryzen 7 · 16 GB · 1 TB SSD', cat:'Laptops', rating:4.4, list:84990, tracked:90, trend:9,
+  desc:'15.6 inch creator laptop with a 2.5K display and a discrete GPU.', specs:{Display:'15.6" 2.5K, 120 Hz',Processor:'Ryzen 7, 8 cores',Memory:'16 GB RAM, 1 TB SSD',Graphics:'6 GB discrete GPU'},
+  stores:{amazon:{price:71990,d:0,pdisc:0,stock:true}, flipkart:{price:72490,d:0,pdisc:0,stock:true}, croma:{price:73490,d:0,pdisc:0,stock:true}, reliance:{price:72990,d:0,pdisc:0,stock:true}}},
+ {id:'pulse-anc-700', name:'Pulse ANC 700 Headphones', brand:'Pulse', model:'PH-700', variant:'Over-ear · Black', cat:'Audio', rating:4.5, list:12999, tracked:365, trend:2,
+  desc:'Over-ear wireless headphones with active noise cancellation and 40 hours of playback.', specs:{Type:'Over-ear, Bluetooth 5.3',Battery:'40 hours (ANC on: 32)',Noise:'Hybrid ANC',Charging:'USB-C, 10 min gives 5 hours'},
+  stores:{amazon:{price:7999,d:0,pdisc:0,stock:true}, flipkart:{price:8499,d:40,pdisc:0,stock:true}, croma:{price:9499,d:0,pdisc:0,stock:true}, reliance:{price:9999,d:0,pdisc:0,stock:true}}},
+ {id:'echo-buds-lite', name:'Echo Buds Lite', brand:'Echo', model:'EB-L2', variant:'In-ear · White', cat:'Audio', rating:4.0, list:3999, tracked:365, trend:6,
+  desc:'True wireless earbuds with a 28 hour battery case and an IPX4 rating.', specs:{Type:'In-ear, Bluetooth 5.2',Battery:'7 h + 21 h case',Rating:'IPX4',Charging:'USB-C'},
+  stores:{amazon:{price:1799,d:0,pdisc:0,stock:true}, flipkart:{price:1699,d:40,pdisc:0,stock:true}, meesho:{price:1599,d:79,pdisc:0,stock:true}, myntra:{price:1899,d:0,pdisc:0,stock:true}}},
+ {id:'striderun-cloud-9', name:'StrideRun Cloud Sneakers', brand:'StrideRun', model:'SR-CLD-9', variant:'UK 9 · White', cat:'Fashion', rating:4.4, list:5999, tracked:365, trend:4,
+  desc:'Cushioned everyday running shoes with a knit upper and a rubber outsole.', specs:{Size:'UK 9',Colour:'White',Upper:'Engineered knit',Sole:'EVA midsole, rubber outsole'},
+  stores:{myntra:{price:3299,d:0,pdisc:0,stock:true}, flipkart:{price:3499,d:0,pdisc:0,stock:true}, amazon:{price:3399,d:0,pdisc:0,stock:true}, meesho:{price:3199,d:70,pdisc:0,stock:true}}},
+ {id:'urbanfit-slim-jeans', name:'UrbanFit Slim Jeans', brand:'UrbanFit', model:'UF-SJ-32', variant:'Waist 32 · Indigo', cat:'Fashion', rating:4.1, list:2499, tracked:120, trend:8,
+  desc:'Stretch denim in a slim fit with a mid rise.', specs:{Fit:'Slim, mid rise',Waist:'32 inch',Fabric:'98% cotton, 2% elastane',Colour:'Indigo'},
+  stores:{myntra:{price:1299,d:0,pdisc:0,stock:true}, meesho:{price:1149,d:60,pdisc:0,stock:true}, flipkart:{price:1349,d:0,pdisc:0,stock:true}, amazon:{price:1399,d:0,pdisc:0,stock:true}}},
+ {id:'chrono-s2-watch', name:'Chrono S2 Smartwatch', brand:'Chrono', model:'CS2-44', variant:'44 mm · Graphite', cat:'Wearables', rating:4.2, list:9999, tracked:365, trend:7,
+  desc:'AMOLED smartwatch with GPS, heart-rate tracking and 10 days of battery.', specs:{Display:'1.43" AMOLED',Battery:'Up to 10 days',Sensors:'GPS, heart rate, SpO2',Water:'5 ATM'},
+  stores:{amazon:{price:5499,d:0,pdisc:0,stock:true}, flipkart:{price:5299,d:0,pdisc:0,stock:true}, croma:{price:6999,d:0,pdisc:0,stock:true}, myntra:{price:5799,d:0,pdisc:0,stock:true}}},
+ {id:'vista-55-4k', name:'Vista 55" 4K Smart TV', brand:'Vista', model:'VT55-4K', variant:'55 inch · 4K', cat:'TVs', rating:4.3, list:52990, tracked:365, trend:10,
+  desc:'55 inch 4K TV with HDR10, a 60 Hz panel and built-in streaming apps.', specs:{Panel:'55" 4K LED, HDR10',Refresh:'60 Hz',Audio:'24 W, Dolby Audio',Ports:'3 HDMI, 2 USB'},
+  stores:{amazon:{price:33990,d:0,pdisc:0,stock:true}, flipkart:{price:32990,d:0,pdisc:0,stock:true}, croma:{price:35490,d:0,pdisc:0,stock:true}, reliance:{price:34990,d:0,pdisc:0,stock:true}}},
+ {id:'aeroblend-750', name:'AeroBlend Mixer Grinder', brand:'AeroBlend', model:'AB-750', variant:'750 W · 3 jars', cat:'Home', rating:4.1, list:4999, tracked:365, trend:11,
+  desc:'750 W mixer grinder with three stainless steel jars.', specs:{Power:'750 W',Jars:'3 stainless steel',Speeds:'3 + pulse',Warranty:'2 years'},
+  stores:{amazon:{price:2799,d:0,pdisc:0,stock:true}, flipkart:{price:2699,d:49,pdisc:0,stock:true}, meesho:{price:2499,d:80,pdisc:0,stock:true}, reliance:{price:3299,d:0,pdisc:0,stock:true}}},
+ {id:'kite-kurta-set', name:'Kite Cotton Kurta Set', brand:'Kite', model:'KT-KS-L', variant:'Size L · Teal', cat:'Fashion', rating:3.9, list:1999, tracked:60, trend:12,
+  desc:'Straight-cut cotton kurta with matching trousers.', specs:{Size:'L',Colour:'Teal',Fabric:'100% cotton',Set:'Kurta and trousers'},
+  stores:{meesho:{price:699,d:0,pdisc:0,stock:true}, myntra:{price:899,d:0,pdisc:0,stock:true}, flipkart:{price:849,d:49,pdisc:0,stock:true}}}
+];
+const P = Object.fromEntries(PRODUCTS.map(p=>[p.id,p]));
+
+const ALL_CATS = ['Mobiles','Laptops','Audio','Wearables','TVs','Home','Fashion'];
+const COUPONS = [
+ {id:'c1', store:'amazon', code:'WELCOME150', title:'₹150 off for new customers', type:'flat', value:150, min:999, max:150, until:'2026-12-31', status:'verified', cats:'all', newUser:true},
+ {id:'c2', store:'flipkart', code:'FLIP10', title:'10% off Fashion and Home', type:'pct', value:10, min:1500, max:500, until:'2026-12-15', status:'verified', cats:['Fashion','Home']},
+ {id:'c3', store:'myntra', code:'MYNTRA300', title:'₹300 off orders above ₹1,999', type:'flat', value:300, min:1999, max:300, until:'2026-12-05', status:'verified', cats:['Fashion']},
+ {id:'c4', store:'meesho', code:'MEESHO50', title:'₹50 off your first order', type:'flat', value:50, min:299, max:50, until:'2026-11-30', status:'unverified', cats:'all', newUser:true},
+ {id:'c5', store:'croma', code:'CROMA5', title:'5% off electronics', type:'pct', value:5, min:5000, max:1500, until:'2026-12-20', status:'verified', cats:['Mobiles','Laptops','Audio','TVs','Wearables']},
+ {id:'c6', store:'reliance', code:'RELFREE', title:'Free delivery on orders above ₹2,000', type:'ship', value:0, min:2000, max:0, until:'2026-12-10', status:'unverified', cats:'all'},
+ {id:'c7', store:'amazon', code:'AUDIO200', title:'₹200 off audio and wearables', type:'flat', value:200, min:1500, max:200, until:'2026-11-30', status:'verified', cats:['Audio','Wearables']},
+ {id:'c8', store:'flipkart', code:'OLDSALE', title:'15% off, festive sale', type:'pct', value:15, min:1000, max:1000, until:'2026-10-31', status:'verified', cats:'all'},
+ {id:'c9', store:'myntra', code:'FIRST20', title:'20% off for new customers', type:'pct', value:20, min:999, max:400, until:'2026-12-31', status:'verified', cats:['Fashion'], newUser:true},
+ {id:'c10', store:'croma', code:'LAPTOP1500', title:'₹1,500 off laptops', type:'flat', value:1500, min:40000, max:1500, until:'2026-12-25', status:'unverified', cats:['Laptops']}
+];
+const BANKS = [
+ {id:'b1', bank:'HDFC Bank', card:'Credit card', network:'Visa, Mastercard', kind:'instant', type:'pct', value:10, max:1500, min:10000, stores:['amazon','flipkart'], until:'2026-12-31', status:'verified', comb:true, terms:'10% instant discount up to ₹1,500 on credit card transactions of ₹10,000 or more. Can be used with a store coupon.'},
+ {id:'b2', bank:'SBI', card:'Credit card', network:'Visa', kind:'instant', type:'pct', value:7.5, max:1250, min:8000, stores:['amazon','croma','reliance'], until:'2026-12-20', status:'verified', comb:false, terms:'7.5% instant discount up to ₹1,250 on SBI credit cards. Not valid with store coupons.'},
+ {id:'b3', bank:'ICICI Bank', card:'Credit card', network:'Visa, Rupay', kind:'instant', type:'pct', value:10, max:1000, min:5000, stores:['flipkart','myntra'], until:'2026-12-15', status:'verified', comb:true, terms:'10% instant discount up to ₹1,000 on orders of ₹5,000 or more. Can be used with a store coupon.'},
+ {id:'b4', bank:'Axis Bank', card:'Debit card', network:'Visa, Mastercard', kind:'instant', type:'flat', value:500, max:500, min:3000, stores:['amazon','flipkart'], until:'2026-12-10', status:'verified', comb:false, terms:'Flat ₹500 off on debit card transactions of ₹3,000 or more. Not valid with store coupons.'},
+ {id:'b5', bank:'Kotak Mahindra Bank', card:'Credit card', network:'Mastercard', kind:'cashback', type:'pct', value:5, max:750, min:2000, stores:['amazon','myntra','croma'], until:'2026-12-31', status:'unverified', comb:true, terms:'5% cashback up to ₹750, credited to the card statement within 90 days. Terms not yet confirmed.'},
+ {id:'b6', bank:'HDFC Bank', card:'Credit card', network:'Visa, Mastercard', kind:'noCostEmi', type:'emi', value:0, max:0, min:15000, stores:['amazon','croma','reliance'], until:'2026-12-31', status:'verified', comb:true, months:[3,6], terms:'No-cost EMI for 3 and 6 months on orders of ₹15,000 or more. The interest is passed back as a discount at checkout.'},
+ {id:'b7', bank:'ICICI Bank', card:'Credit card', network:'Visa, Rupay', kind:'emi', type:'emi', value:0, max:0, min:10000, stores:['flipkart','amazon'], until:'2026-12-31', status:'verified', comb:true, months:[9,12], terms:'Standard EMI at 14% a year for 9 and 12 months. Interest applies.'},
+ {id:'b8', bank:'Axis Bank', card:'Credit card', network:'Visa', kind:'instant', type:'pct', value:7.5, max:2000, min:20000, stores:['croma','reliance'], until:'2026-10-20', status:'verified', comb:true, terms:'7.5% instant discount up to ₹2,000. This offer has ended.'},
+ {id:'b9', bank:'Federal Bank', card:'Debit card', network:'Visa', kind:'cashback', type:'flat', value:100, max:100, min:1000, stores:['meesho','myntra'], until:'2026-12-31', status:'unverified', comb:true, terms:'Flat ₹100 cashback on debit card orders of ₹1,000 or more. Terms not yet confirmed.'}
+];
+const isExpired = o => pd(o.until) < TODAY;
+
+/* ---------- derived values ---------- */
+function offers(p){ return Object.entries(p.stores).map(([k,s])=>({key:k, name:STORES[k], ...s})); }
+function lowest(p){ const o = offers(p).filter(x=>x.stock); const pool = o.length?o:offers(p); return pool.reduce((a,b)=>b.price<a.price?b:a); }
+function firstStore(p){ return offers(p)[0]; }
+const discPct = p => Math.round((1 - lowest(p).price / p.list) * 100);
+
+/* ---------- price history (generated demo series, deterministic) ---------- */
+function rng(seed){ let a = seed>>>0; return ()=>{ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const HIST_CACHE = {};
+function history(p){
+  if(HIST_CACHE[p.id]) return HIST_CACHE[p.id];
+  const N = p.tracked, r = rng([...p.id].reduce((a,c)=>a*31+c.charCodeAt(0),7));
+  const cur = lowest(p).price; let v = p.list*(0.93+r()*0.05); const raw = [];
+  let sale = 0;
+  for(let i=0;i<N;i++){
+    const daysAgo = N-1-i;
+    v += (cur*1.06 - v)*0.015 + (r()-0.5)*0.012*p.list;
+    if(sale<=0 && r()<0.02) sale = 3+Math.floor(r()*4);
+    const price = sale>0 ? v*0.9 : v; if(sale>0) sale--;
+    raw.push(price);
+  }
+  const k = cur / raw[N-1];
+  const pts = raw.map((x,i)=>{ const d = new Date(TODAY); d.setDate(d.getDate()-(N-1-i)); return {d, v: Math.min(Math.round(x*k), Math.round(p.list*1.02))}; });
+  pts[N-1].v = cur;
+  return HIST_CACHE[p.id] = pts;
+}
+function avg30(p){ const h = history(p); const s = h.slice(-31,-1); return s.reduce((a,b)=>a+b.v,0)/s.length; }
+const dropVs30 = p => Math.round((1 - lowest(p).price/avg30(p))*100);
+function aggregate(pts, days){
+  if(days===1) return pts;
+  const out=[]; for(let i=0;i<pts.length;i+=days){ const g=pts.slice(i,i+days); out.push({d:g[Math.floor(g.length/2)].d, v:Math.round(g.reduce((a,b)=>a+b.v,0)/g.length)}); } return out;
+}
+
+/* ---------- final price engine ---------- */
+function couponCheck(c, p, key, base, inc){
+  const s = p.stores[key];
+  if(c.store!==key) return 'Only valid on '+STORES[c.store];
+  if(isExpired(c)) return 'Expired on '+fmtDate(pd(c.until));
+  if(c.status!=='verified' && !inc) return 'Unverified. Enable estimates to include it';
+  if(c.cats!=='all' && !c.cats.includes(p.cat)) return 'Not valid for '+p.cat;
+  if(base < c.min) return 'Needs a minimum of '+inr(c.min);
+  return null;
+}
+function bankCheck(b, key, amount, inc){
+  if(isExpired(b)) return 'Offer ended on '+fmtDate(pd(b.until));
+  if(!b.stores.includes(key)) return 'Not valid on '+STORES[key];
+  if(b.status!=='verified' && !inc) return 'Unverified. Enable estimates to include it';
+  if(amount < b.min) return 'Needs a minimum of '+inr(b.min);
+  if(b.type==='emi') return 'EMI plan. No price discount';
+  return null;
+}
+function compute(p, key, couponId, bankId, inc){
+  const s = p.stores[key], lines = [], notes = [];
+  const price = s.price, delivery = s.d, plat = s.pdisc;
+  let after = price - plat;
+  lines.push({t:'Product price at '+STORES[key], v:price});
+  if(delivery) lines.push({t:'Delivery charge', v:delivery}); else lines.push({t:'Delivery charge', v:0, free:true});
+  if(plat) lines.push({t:'Store discount', v:-plat});
+  let cd = 0, bd = 0, cb = 0, usedCoupon = null, usedBank = null;
+  const c = COUPONS.find(x=>x.id===couponId);
+  if(c){
+    const why = couponCheck(c, p, key, after, inc);
+    if(why) notes.push('Coupon '+c.code+' not applied: '+why+'.');
+    else { cd = c.type==='pct' ? Math.min(c.max, Math.round(after*c.value/100)) : c.type==='flat' ? Math.min(c.value, after) : delivery;
+           usedCoupon = c; lines.push({t:'Coupon '+c.code+(c.status!=='verified'?' (unverified)':''), v:-cd}); }
+  }
+  const afterCoupon = after + delivery - cd;
+  const b = BANKS.find(x=>x.id===bankId);
+  if(b){
+    const why = bankCheck(b, key, afterCoupon, inc);
+    if(why) notes.push(b.bank+' offer not applied: '+why+'.');
+    else if(usedCoupon && !b.comb) notes.push(b.bank+' offer not applied: its terms do not allow use with a coupon. Pick one or the other.');
+    else {
+      const amt = b.type==='pct' ? Math.min(b.max, Math.round(afterCoupon*b.value/100)) : Math.min(b.value, b.max);
+      usedBank = b;
+      if(b.kind==='cashback'){ cb = amt; } else { bd = amt; lines.push({t:b.bank+' '+b.card.toLowerCase()+' discount'+(b.status!=='verified'?' (unverified)':''), v:-bd}); }
+    }
+  }
+  const payable = Math.max(0, price + delivery - plat - cd - bd);
+  const effective = payable - cb;
+  const estimate = (usedCoupon&&usedCoupon.status!=='verified') || (usedBank&&usedBank.status!=='verified');
+  return {lines, notes, payable, cashback:cb, effective, savings:p.list-effective, savedVsShelf:price+delivery-effective, estimate, usedCoupon, usedBank, cb};
+}
+function bestCombo(p, inc){
+  let best = null;
+  for(const k of Object.keys(p.stores)){
+    if(!p.stores[k].stock) continue;
+    const cs=[null,...COUPONS.filter(c=>!couponCheck(c,p,k,p.stores[k].price-p.stores[k].pdisc,inc))];
+    const bs=[null,...BANKS.filter(b=>!bankCheck(b,k,p.stores[k].price,inc))];
+    for(const c of cs) for(const b of bs){
+      const r = compute(p,k,c&&c.id,b&&b.id,inc);
+      if(r.notes.length) continue;
+      if(!best || r.effective<best.r.effective) best={key:k,c,b,r};
+    }
+  }
+  return best;
+}
+
+/* ---------- glyphs ---------- */
+const GLYPH = {
+ Mobiles:'<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="18" y="6" width="24" height="48" rx="5"/><path d="M26 11h8M27 48h6"/></svg>',
+ Laptops:'<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="12" width="36" height="25" rx="3"/><path d="M6 44h48l-4 5H10z"/></svg>',
+ Audio:'<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 36V30a18 18 0 0 1 36 0v6"/><rect x="9" y="34" width="9" height="16" rx="4"/><rect x="42" y="34" width="9" height="16" rx="4"/></svg>',
+ Wearables:'<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="17" y="16" width="26" height="28" rx="8"/><path d="M22 16l2-9h12l2 9M22 44l2 9h12l2-9M30 24v7l4 3"/></svg>',
+ TVs:'<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="11" width="48" height="31" rx="3"/><path d="M22 51h16M30 42v9"/></svg>',
+ Home:'<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 24h24l-3 26H21z"/><path d="M16 24h28M30 24V12M25 12h10"/></svg>',
+ Fashion:'<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 8l-14 8 5 10 7-3v28h24V23l7 3 5-10-14-8c-1 4-4 6-8 6s-7-2-8-6z"/></svg>'
+};
+const tile = (p, extra='') => `<div class="tile" style="--h:${hueOf(p.cat)}" role="img" aria-label="${esc(p.name)} illustration (placeholder)">${GLYPH[p.cat]}</div>`;
+const stars = r => `<span class="rating">★ ${r.toFixed(1)}</span>`;
+const demoBadge = '<span class="badge b-demo">Demo data</span>';
+const statusBadge = o => isExpired(o) ? '<span class="badge b-bad">Expired</span>' : o.status==='verified' ? '<span class="badge b-ok">✓ Verified</span>' : '<span class="badge b-warn">Unverified</span>';
+
+/* ---------- state ---------- */
+const S = { q:'', f:{min:'', max:'', brands:new Set(), stores:new Set(), rating:0, avail:false, cat:''}, sort:'relevance',
+            range:90, gran:1, calc:{key:null, c:'', b:'', inc:false}, couponQ:'', couponCat:'', couponType:'', bankFilter:'', scrollTo:null };
+const getAlerts = () => store.get('alerts', {});
+const getHist = () => store.get('alertlog', []);
+const getWish = () => store.get('wish', []);
+const getRecent = () => store.get('recent', []);
+
+/* ---------- components ---------- */
+function productCard(p){
+  const lo = lowest(p), fs = firstStore(p);
+  const wished = getWish().includes(p.id);
+  return `<article class="card pcard">
+    <a href="#p-${p.id}" style="text-decoration:none;color:inherit" aria-label="${esc(p.name)}">${tile(p)}</a>
+    <div class="row" style="justify-content:space-between">${demoBadge}${stars(p.rating)}</div>
+    <div><h3><a href="#p-${p.id}" style="color:inherit;text-decoration:none">${esc(p.name)}</a></h3>
+      <div class="muted small">${esc(p.brand)} · ${esc(p.model)} · ${esc(p.variant)}</div></div>
+    <div><span class="price num">${inr(fs.price)}</span> <span class="strike num">${inr(p.list)}</span> <span class="off">${Math.round((1-fs.price/p.list)*100)}% off</span>
+      <div class="small muted">at ${fs.name}</div></div>
+    <div class="small"><b>Lowest: <span class="num">${inr(lo.price)}</span></b> at ${lo.name}${Object.keys(p.stores).length>1?'':''}</div>
+    <div class="pcard-actions">
+      <a class="btn sm" href="#p-${p.id}" data-scroll="compare">Compare prices</a>
+      <a class="btn sm ghost" href="#p-${p.id}" data-scroll="history">Price history</a>
+    </div></article>`;
+}
+function couponCard(c){
+  const exp = isExpired(c);
+  const val = c.type==='pct' ? c.value+'% off' : c.type==='flat' ? inr(c.value)+' off' : 'Free delivery';
+  return `<article class="card coupon ${exp?'expired':''}">
+    <div class="row" style="justify-content:space-between"><b>${STORES[c.store]}</b>${statusBadge(c)}</div>
+    <h3>${esc(c.title)}</h3>
+    <div class="row"><span class="code">${esc(c.code)}</span><button class="btn sm ghost" data-act="copy" data-code="${esc(c.code)}" ${exp?'disabled':''}>Copy code</button></div>
+    <dl class="kv"><dt>Value</dt><dd>${val}${c.max&&c.type==='pct'?' (max '+inr(c.max)+')':''}</dd>
+      <dt>Minimum</dt><dd>${inr(c.min)}</dd><dt>Valid till</dt><dd>${fmtDate(pd(c.until))}</dd>
+      <dt>Applies to</dt><dd>${c.cats==='all'?'All categories':c.cats.join(', ')}${c.newUser?' · New users':''}</dd></dl>
+    <button class="btn sm ghost" data-act="report" data-code="${esc(c.code)}" style="align-self:flex-start">Report expired</button></article>`;
+}
+function bankCard(b){
+  const exp = isExpired(b);
+  const val = b.type==='emi' ? (b.kind==='noCostEmi'?'No-cost EMI':'EMI plan') : b.type==='pct' ? b.value+'% '+(b.kind==='cashback'?'cashback':'instant discount') : inr(b.value)+' '+(b.kind==='cashback'?'cashback':'instant discount');
+  return `<article class="card coupon ${exp?'expired':''}">
+    <div class="row" style="justify-content:space-between"><b>${b.bank}</b>${statusBadge(b)}</div>
+    <h3>${val}</h3>
+    <div class="muted small">${b.card} · ${b.network}</div>
+    <dl class="kv"><dt>Max discount</dt><dd>${b.max?inr(b.max):'Not applicable'}</dd><dt>Min transaction</dt><dd>${inr(b.min)}</dd>
+      <dt>Valid till</dt><dd>${fmtDate(pd(b.until))}</dd><dt>Stores</dt><dd>${b.stores.map(s=>STORES[s]).join(', ')}</dd>
+      <dt>With coupon</dt><dd>${b.comb?'Allowed by offer terms':'Not allowed'}</dd>${b.months?`<dt>Tenure</dt><dd>${b.months.join(', ')} months</dd>`:''}</dl>
+    <p class="small muted">${esc(b.terms)}</p></article>`;
+}
+
+/* ---------- views ---------- */
+function viewHome(){
+  const best = bestCombo(P['aria-pro-12'], false);
+  const trending = [...PRODUCTS].sort((a,b)=>a.trend-b.trend).slice(0,4);
+  const deals = [...PRODUCTS].sort((a,b)=>discPct(b)-discPct(a)).slice(0,4);
+  const drops = [...PRODUCTS].filter(p=>dropVs30(p)>0).sort((a,b)=>dropVs30(b)-dropVs30(a)).slice(0,3);
+  const recent = getRecent().map(id=>P[id]).filter(Boolean).slice(0,4);
+  const coupons = COUPONS.filter(c=>!isExpired(c)&&c.status==='verified').slice(0,4);
+  const banks = BANKS.filter(b=>!isExpired(b)&&b.status==='verified'&&b.type!=='emi').slice(0,3);
+  const hp = P['aria-pro-12'];
+  const hs = hp.stores[best.key];
+  return `
+  <section class="hero">
+    <div>
+      <span class="badge b-info">Price comparison · History · Coupons · Bank offers</span>
+      <h1 style="margin-top:14px">One Search. Every Store. <em>Best Deal.</em></h1>
+      <p class="lead">DISCOUNT finds the lowest price across stores, then subtracts the coupons and bank offers you actually qualify for, so you see the real amount you pay.</p>
+      <form class="search-big" id="heroSearch" role="search" autocomplete="off">
+        <input class="field" id="heroQ" placeholder="Try “Aria Pro 12”, “headphones” or paste a product URL" aria-label="Search products" aria-autocomplete="list" aria-controls="heroSuggest">
+        <button class="btn" type="submit">Search</button>
+        <div class="suggest" id="heroSuggest" role="listbox" hidden></div>
+      </form>
+      <div class="row" style="margin-top:14px"><span class="small muted">Popular:</span>
+        ${['Mobiles','Headphones','Laptops','Sneakers'].map(t=>`<button class="chip" data-act="quick" data-q="${t}">${t}</button>`).join('')}</div>
+    </div>
+    <div class="card stack-card" aria-label="Example of a final price calculation">
+      <div class="row" style="justify-content:space-between"><h3>The real price of ${esc(hp.name)}</h3>${demoBadge}</div>
+      <p class="small muted" style="margin:4px 0 10px">${esc(hp.variant)} · best verified combination</p>
+      ${best.r.lines.map(l=>`<div class="stack-line"><span>${esc(l.t)}</span><span class="num ${l.v<0?'minus':''}">${l.v<0?'−':''}${l.free?'Free':inr(Math.abs(l.v))}</span></div>`).join('')}
+      ${best.r.cashback?`<div class="stack-line"><span>Cashback later (${best.b.bank})</span><span class="num minus">−${inr(best.r.cashback)}</span></div>`:''}
+      <div class="stack-line total"><span>You pay</span><span class="num" style="color:var(--green)">${inr(best.r.payable)}</span></div>
+      <p class="small muted">Only verified offers counted. List price ${inr(hp.list)}.</p>
+      <a class="btn" style="margin-top:12px;width:100%" href="#p-${hp.id}" data-scroll="calc">Open the calculator</a>
+    </div>
+  </section>
+
+  <section class="section"><div class="section-head"><h2>Trending products</h2><a href="#search" data-act="all">View all</a></div>
+    <div class="grid g4">${trending.map(productCard).join('')}</div></section>
+
+  <section class="section"><div class="section-head"><h2>Today's best deals</h2><span class="small muted">Biggest gap between list price and lowest price</span></div>
+    <div class="grid g4">${deals.map(productCard).join('')}</div></section>
+
+  <section class="section"><div class="section-head"><h2>Shop by category</h2></div>
+    <div class="grid g4" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">${CATS.map(c=>`<button class="cat-card" data-act="cat" data-cat="${c.n}"><span class="ico" style="--h:${c.h}">${GLYPH[c.n]}</span><span><b>${c.n}</b><br><span class="small muted">${PRODUCTS.filter(p=>p.cat===c.n).length} products</span></span></button>`).join('')}</div></section>
+
+  <section class="section"><div class="section-head"><h2>Recently viewed</h2></div>
+    ${recent.length?`<div class="grid g4">${recent.map(productCard).join('')}</div>`:`<div class="empty">Products you open will appear here. This list is saved in this browser only.</div>`}</section>
+
+  <section class="section"><div class="section-head"><h2>Price drops</h2><span class="small muted">Today's lowest price against the 30-day average</span></div>
+    <div class="grid g3">${drops.map(p=>`<a href="#p-${p.id}" class="card row" style="text-decoration:none;color:inherit;flex-wrap:nowrap"><div style="width:84px;flex:none">${tile(p)}</div><div class="grow"><h4>${esc(p.name)}</h4><div class="num"><b>${inr(lowest(p).price)}</b> <span class="off">↓ ${dropVs30(p)}%</span></div><div class="small muted">30-day average ${inr(avg30(p))}</div></div></a>`).join('')}</div>
+    <p class="small muted" style="margin-top:10px">To be told when a price reaches your target, set an alert on any product page. <a href="#watchlist">Open your watchlist</a>.</p></section>
+
+  <section class="section"><div class="section-head"><h2>Best coupons</h2><a href="#coupons">All coupons</a></div>
+    <div class="grid g4">${coupons.map(couponCard).join('')}</div></section>
+
+  <section class="section"><div class="section-head"><h2>Bank offers</h2><a href="#banks">All bank offers</a></div>
+    <div class="grid g3">${banks.map(bankCard).join('')}</div></section>
+
+  <section class="section"><div class="section-head"><h2>How DISCOUNT works</h2></div>
+    <div class="steps">
+      <div class="card step"><h3>Search</h3><p class="muted small" style="margin-top:6px">Search by name, brand, model, category or paste a product link.</p></div>
+      <div class="card step"><h3>Match</h3><p class="muted small" style="margin-top:6px">Stores are compared only when brand, model and variant match, so a 128 GB phone is never compared with a 256 GB one.</p></div>
+      <div class="card step"><h3>Apply offers</h3><p class="muted small" style="margin-top:6px">Coupons and bank offers are checked for minimum spend, caps and whether they can be combined.</p></div>
+      <div class="card step"><h3>Decide</h3><p class="muted small" style="margin-top:6px">See the final payable price, the 1-year price history, and set an alert for your target.</p></div>
+    </div></section>
+
+  <section class="section"><div class="ext">
+    <div><h2>DISCOUNT for Chrome</h2>
+      <p style="margin-top:10px;max-width:50ch">See the lowest price, coupons and bank offers in a side panel while you browse a store. It reads the product page only. It never touches your cart, checkout or payment fields.</p>
+      <ul class="small" style="margin:12px 0 16px;padding-left:18px"><li>Works on Amazon India, Flipkart, Meesho and Myntra product pages</li><li>Asks only for the permissions it needs</li></ul>
+      <button class="btn" disabled title="The extension is built separately and is not published yet">Not published yet</button></div>
+    <div class="mini"><b>Side panel preview</b><div class="stack-line" style="border-color:rgba(255,255,255,.25)"><span>On this page</span><span class="num">${inr(hp.stores.flipkart.price)}</span></div><div class="stack-line" style="border-color:rgba(255,255,255,.25)"><span>Lowest on DISCOUNT</span><span class="num">${inr(lowest(hp).price)}</span></div><div class="small" style="margin-top:8px">Sample numbers from demo data.</div></div>
+  </div></section>`;
+}
+
+function filterProducts(){
+  const q = S.q.trim().toLowerCase(), f = S.f;
+  let list = PRODUCTS.filter(p=>{
+    if(q){
+      const hay = [p.name,p.brand,p.model,p.cat,p.variant].join(' ').toLowerCase();
+      const words = q.split(/\s+/).filter(Boolean);
+      const syn = {headphones:'audio', earbuds:'audio', sneakers:'fashion', shoes:'fashion', phone:'mobiles', phones:'mobiles', tv:'tvs', watch:'wearables', laptop:'laptops', mobile:'mobiles'};
+      if(!words.every(w=>hay.includes(w) || (syn[w]&&hay.includes(syn[w])))) return false;
+    }
+    const lo = lowest(p).price;
+    if(f.min!=='' && lo < +f.min) return false;
+    if(f.max!=='' && lo > +f.max) return false;
+    if(f.brands.size && !f.brands.has(p.brand)) return false;
+    if(f.stores.size && !Object.keys(p.stores).some(k=>f.stores.has(k))) return false;
+    if(f.rating && p.rating < f.rating) return false;
+    if(f.avail && !offers(p).some(o=>o.stock)) return false;
+    if(f.cat && p.cat!==f.cat) return false;
+    return true;
+  });
+  const by = {'price-asc':(a,b)=>lowest(a).price-lowest(b).price,'price-desc':(a,b)=>lowest(b).price-lowest(a).price,'discount':(a,b)=>discPct(b)-discPct(a),'rating':(a,b)=>b.rating-a.rating,'relevance':(a,b)=>a.trend-b.trend};
+  return list.sort(by[S.sort]);
+}
+function urlQuery(raw){
+  try{ const u = new URL(raw); const host = u.hostname.replace(/^www\./,'');
+    const known = ['amazon.in','flipkart.com','meesho.com','myntra.com','croma.com','reliancedigital.in'];
+    const slug = decodeURIComponent(u.pathname).split('/').filter(Boolean).filter(s=>!/^(dp|p|buy|product|itm|gp)$/i.test(s)&&!/^[A-Z0-9]{10}$/.test(s))[0]||'';
+    return {host, known:known.some(k=>host.endsWith(k)), text: slug.replace(/[-_+]+/g,' ').trim()};
+  }catch(e){ return null; }
+}
+function viewSearch(){
+  let urlInfo = /^https?:\/\//i.test(S.q.trim()) ? urlQuery(S.q.trim()) : null;
+  const saved = S.q; if(urlInfo) S.q = urlInfo.text;
+  const list = filterProducts(); if(urlInfo) S.q = saved;
+  const brands = [...new Set(PRODUCTS.map(p=>p.brand))].sort();
+  const f = S.f;
+  return `<div class="search-layout">
+   <aside class="filters panel" aria-label="Filters">
+     <div class="row" style="justify-content:space-between"><h3>Filters</h3><button class="btn sm ghost" data-act="clear">Clear</button></div>
+     <div><label class="lbl" for="fcat">Category</label><select class="field" id="fcat"><option value="">All categories</option>${ALL_CATS.map(c=>`<option ${f.cat===c?'selected':''}>${c}</option>`).join('')}</select></div>
+     <div><span class="lbl">Price range (₹)</span><div class="row" style="flex-wrap:nowrap"><input class="field" id="fmin" type="number" min="0" placeholder="Min" value="${esc(f.min)}" aria-label="Minimum price"><input class="field" id="fmax" type="number" min="0" placeholder="Max" value="${esc(f.max)}" aria-label="Maximum price"></div></div>
+     <fieldset style="border:0;padding:0;margin:0" class="checks"><legend class="lbl">Brand</legend>${brands.map(b=>`<label><input type="checkbox" data-f="brand" value="${b}" ${f.brands.has(b)?'checked':''}> ${b}</label>`).join('')}</fieldset>
+     <fieldset style="border:0;padding:0;margin:0" class="checks"><legend class="lbl">Shopping platform</legend>${Object.entries(STORES).map(([k,n])=>`<label><input type="checkbox" data-f="store" value="${k}" ${f.stores.has(k)?'checked':''}> ${n}</label>`).join('')}</fieldset>
+     <div><label class="lbl" for="frating">Customer rating</label><select class="field" id="frating"><option value="0">Any</option>${[4.5,4,3.5].map(r=>`<option value="${r}" ${f.rating===r?'selected':''}>${r}★ and above</option>`).join('')}</select></div>
+     <label class="row checks" style="flex-wrap:nowrap"><input type="checkbox" id="favail" ${f.avail?'checked':''}> In stock at one or more stores</label>
+   </aside>
+   <section aria-live="polite">
+     <div class="section-head" style="margin-bottom:12px"><div><h2>${S.q?`Results for “${esc(urlInfo?urlInfo.text||S.q:S.q)}”`:'All products'}</h2><p class="muted small">${list.length} product${list.length===1?'':'s'} · ${demoBadge}</p></div>
+       <div><label class="lbl" for="sort" style="display:inline;margin-right:8px">Sort</label><select class="field" id="sort" style="width:auto;display:inline-block">${[['relevance','Relevance'],['price-asc','Price: low to high'],['price-desc','Price: high to low'],['discount','Biggest discount'],['rating','Rating']].map(([v,n])=>`<option value="${v}" ${S.sort===v?'selected':''}>${n}</option>`).join('')}</select></div></div>
+     ${urlInfo?`<div class="warn-box" style="margin:0 0 14px">${urlInfo.known?`Link from ${esc(urlInfo.host)}. DISCOUNT can't read live pages in this demo, so it searched for “${esc(urlInfo.text||'this link')}” instead.`:`DISCOUNT does not support ${esc(urlInfo.host)} yet. Try searching by product name.`}</div>`:''}
+     ${list.length?`<div class="grid g3">${list.map(productCard).join('')}</div>`:`<div class="empty"><b>No products match.</b><p style="margin-top:6px">Try a different name, or clear the filters.</p><button class="btn" style="margin-top:12px" data-act="clear">Clear filters</button></div>`}
+   </section></div>`;
+}
+
+function chartSVG(pts, cur){
+  const W=720,H=300,L=62,R=16,T=16,B=30;
+  const vals = pts.map(p=>p.v); let mn=Math.min(...vals,cur), mx=Math.max(...vals,cur);
+  const step = (mx-mn)>20000?5000:(mx-mn)>5000?1000:(mx-mn)>1500?500:(mx-mn)>400?100:50;
+  mn=Math.floor(mn/step)*step; mx=Math.ceil(mx/step)*step; if(mx===mn) mx=mn+step;
+  const x=i=>L+(pts.length===1?0:i/(pts.length-1))*(W-L-R), y=v=>T+(1-(v-mn)/(mx-mn))*(H-T-B);
+  const ticks=[]; const n=Math.min(5,Math.round((mx-mn)/step)); for(let i=0;i<=n;i++) ticks.push(mn+(mx-mn)*i/n);
+  const line = pts.map((p,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(p.v).toFixed(1)).join('');
+  const area = line+`L${x(pts.length-1).toFixed(1)} ${H-B}L${x(0).toFixed(1)} ${H-B}Z`;
+  const iMin = vals.indexOf(Math.min(...vals)), iMax = vals.indexOf(Math.max(...vals));
+  const xl=[0,.25,.5,.75,1].map(t=>Math.round(t*(pts.length-1)));
+  return `<svg viewBox="0 0 ${W} ${H}" id="chartSvg" role="img" aria-label="Price history chart, demo data" data-n="${pts.length}" data-l="${L}" data-r="${R}">
+    ${ticks.map(t=>`<line x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)"/><text x="${L-8}" y="${y(t)+4}" text-anchor="end" font-size="11" fill="var(--muted)" class="num">${inr(t)}</text>`).join('')}
+    <path d="${area}" fill="var(--brand)" opacity=".10"/><path d="${line}" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linejoin="round"/>
+    <line x1="${L}" x2="${W-R}" y1="${y(cur)}" y2="${y(cur)}" stroke="var(--purple)" stroke-dasharray="5 4"/>
+    <circle cx="${x(iMin)}" cy="${y(vals[iMin])}" r="5" fill="var(--green)" stroke="var(--surface)" stroke-width="2"/>
+    <circle cx="${x(iMax)}" cy="${y(vals[iMax])}" r="5" fill="var(--red)" stroke="var(--surface)" stroke-width="2"/>
+    <circle cx="${x(pts.length-1)}" cy="${y(cur)}" r="5" fill="var(--purple)" stroke="var(--surface)" stroke-width="2"/>
+    ${xl.map((i,k)=>`<text x="${x(i)}" y="${H-8}" text-anchor="${k===0?'start':k===4?'end':'middle'}" font-size="11" fill="var(--muted)">${fmtShort(pts[i].d)}</text>`).join('')}
+    <line id="xhair" y1="${T}" y2="${H-B}" stroke="var(--muted)" stroke-dasharray="3 3" visibility="hidden"/>
+    <circle id="xdot" r="5" fill="var(--brand)" stroke="var(--surface)" stroke-width="2" visibility="hidden"/>
+    <rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" id="hit"/>
+  </svg><div class="tip" id="tip" hidden></div>`;
+}
+function histPanel(p){
+  const all = history(p), avail = all.length;
+  const days = Math.min(S.range, avail);
+  const sel = all.slice(-days), pts = aggregate(sel, S.gran), cur = lowest(p).price;
+  const hi = Math.max(...sel.map(x=>x.v)), lo = Math.min(...sel.map(x=>x.v)), first = sel[0].v;
+  const allLo = Math.min(...all.map(x=>x.v)), allHi = Math.max(...all.map(x=>x.v));
+  const chg = cur-first;
+  return `<div class="row" style="justify-content:space-between">
+     <div class="seg" role="group" aria-label="Range">${[[30,'30 days'],[90,'90 days'],[180,'6 months'],[365,'1 year']].map(([d,n])=>`<button data-act="range" data-v="${d}" aria-pressed="${S.range===d}">${n}</button>`).join('')}</div>
+     <div class="seg" role="group" aria-label="Granularity">${[[1,'Daily'],[7,'Weekly'],[30,'Monthly']].map(([d,n])=>`<button data-act="gran" data-v="${d}" aria-pressed="${S.gran===d}">${n}</button>`).join('')}</div></div>
+   ${avail<S.range?`<div class="warn-box">Only ${avail} days of history are available for this product, so the chart shows ${avail} days.</div>`:''}
+   <div class="chart-wrap">${chartSVG(pts,cur)}</div>
+   <div class="row small muted" style="gap:16px;margin-top:6px"><span><span style="color:var(--green)">●</span> Lowest</span><span><span style="color:var(--red)">●</span> Highest</span><span><span style="color:var(--purple)">●</span> Current</span>${S.gran>1?'<span>Values are averages per '+(S.gran===7?'week':'month')+'</span>':''}</div>
+   <div class="stats">
+     <div class="stat"><span class="small muted">Current</span><b class="num">${inr(cur)}</b></div>
+     <div class="stat"><span class="small muted">Lowest in range</span><b class="num" style="color:var(--green)">${inr(lo)}</b></div>
+     <div class="stat"><span class="small muted">Highest in range</span><b class="num">${inr(hi)}</b></div>
+     <div class="stat"><span class="small muted">Change over range</span><b class="num" style="color:${chg<=0?'var(--green)':'var(--red)'}">${chg<=0?'↓':'↑'} ${inr(Math.abs(chg))} (${Math.abs(Math.round(chg/first*100))}%)</b></div>
+     <div class="stat"><span class="small muted">All-time low (${avail} days)</span><b class="num">${inr(allLo)}</b></div>
+     <div class="stat"><span class="small muted">Now vs all-time low</span><b class="num">${cur<=allLo?'At the low':'+'+inr(cur-allLo)}</b></div></div>
+   <p class="note">${demoBadge} This series is generated sample data for the lowest store price. It is not a record of real prices. ${avail} days available.</p>`;
+}
+function storeTable(p){
+  const rows = offers(p).map(o=>{
+    const b = bestForStore(p,o.key);
+    return {o, b};
+  });
+  const valid = rows.filter(r=>r.o.stock);
+  const minFinal = Math.min(...valid.map(r=>r.b.r.effective));
+  return `<div class="scroll-x"><table><thead><tr><th>Store</th><th>Price</th><th>Delivery</th><th>Discount vs list</th><th>Coupon</th><th>Bank offer</th><th>Final price</th><th>Link</th></tr></thead><tbody>
+   ${rows.map(({o,b})=>{ const isBest = o.stock && b.r.effective===minFinal;
+     return `<tr class="${isBest?'best':''}"><td><b>${o.name}</b><br>${o.stock?'<span class="badge b-ok">In stock</span>':'<span class="badge b-bad">Out of stock</span>'}</td>
+     <td class="num">${inr(o.price)}${o.pdisc?`<br><span class="small muted">− ${inr(o.pdisc)} store discount</span>`:''}</td><td class="num">${o.d?inr(o.d):'Free'}</td>
+     <td class="num">${Math.round((1-o.price/p.list)*100)}%</td>
+     <td>${b.c?`<span class="code" style="padding:1px 6px;font-size:.8rem">${b.c.code}</span><br><span class="small muted">−${inr(b.cd)}</span>`:'<span class="muted small">None eligible</span>'}</td>
+     <td>${b.b?`${b.b.bank}<br><span class="small muted">${b.b.kind==='cashback'?'cashback ':'−'}${inr(b.bd)}</span>`:'<span class="muted small">None eligible</span>'}</td>
+     <td class="num"><b>${o.stock?inr(b.r.effective):'—'}</b>${isBest?'<br><span class="badge b-ok">Lowest verified</span>':''}</td>
+     <td><button class="btn sm ghost" disabled title="Demo data has no live product links">Unavailable</button></td></tr>`; }).join('')}
+   </tbody></table></div>
+   <p class="note">Final price counts verified offers only, uses the best single coupon and bank offer you can combine under their terms, and subtracts cashback. Variant: ${esc(p.variant)}. Only this exact variant is compared.</p>`;
+}
+function bestForStore(p,key){
+  const inc=false, base=p.stores[key].price-p.stores[key].pdisc; let best=null;
+  const cs=[null,...COUPONS.filter(c=>!couponCheck(c,p,key,base,inc))], bs=[null,...BANKS.filter(b=>!bankCheck(b,key,p.stores[key].price,inc))];
+  for(const c of cs) for(const b of bs){ const r=compute(p,key,c&&c.id,b&&b.id,inc); if(r.notes.length) continue; if(!best||r.effective<best.r.effective) best={c:r.usedCoupon,b:r.usedBank,r,cd:c?(r.lines.find(l=>l.t.startsWith('Coupon'))||{v:0}).v*-1:0,bd:b?(b.kind==='cashback'?r.cashback:(r.lines.find(l=>l.t.startsWith(b.bank))||{v:0}).v*-1):0}; }
+  return best;
+}
+function calcPanel(p){
+  const c = S.calc; if(!c.key||!p.stores[c.key]) c.key = lowest(p).key;
+  const r = compute(p, c.key, c.c, c.b, c.inc), base = p.stores[c.key].price-p.stores[c.key].pdisc;
+  const cs = COUPONS.filter(x=>x.store===c.key), bs = BANKS.filter(x=>x.stores.includes(c.key)&&x.type!=='emi');
+  return `<div class="grid g2">
+    <div style="display:grid;gap:12px;align-content:start">
+      <div><label class="lbl" for="cstore">Store</label><select class="field" id="cstore">${offers(p).map(o=>`<option value="${o.key}" ${o.key===c.key?'selected':''}>${o.name} · ${inr(o.price)}${o.stock?'':' (out of stock)'}</option>`).join('')}</select></div>
+      <div><label class="lbl" for="ccoupon">Coupon</label><select class="field" id="ccoupon"><option value="">No coupon</option>${cs.map(x=>{const w=couponCheck(x,p,c.key,base,c.inc);return `<option value="${x.id}" ${c.c===x.id?'selected':''}>${x.code} · ${x.type==='pct'?x.value+'%':x.type==='flat'?inr(x.value):'Free delivery'}${w?' — '+w:''}</option>`}).join('')}</select></div>
+      <div><label class="lbl" for="cbank">Bank offer</label><select class="field" id="cbank"><option value="">No bank offer</option>${bs.map(x=>{const w=bankCheck(x,c.key,base+p.stores[c.key].d,c.inc);return `<option value="${x.id}" ${c.b===x.id?'selected':''}>${x.bank} ${x.card.toLowerCase()} · ${x.type==='pct'?x.value+'%':inr(x.value)} ${x.kind}${w?' — '+w:''}</option>`}).join('')}</select></div>
+      <label class="row checks" style="flex-wrap:nowrap;align-items:flex-start"><input type="checkbox" id="cinc" ${c.inc?'checked':''}> <span>Include unverified offers as estimates</span></label>
+      <button class="btn ghost" data-act="autobest">Pick the best verified combination</button>
+    </div>
+    <div class="calc-out" aria-live="polite">
+      ${r.lines.map(l=>`<div class="stack-line"><span>${esc(l.t)}</span><span class="num ${l.v<0?'minus':''}">${l.v<0?'−':''}${l.free?'Free':inr(Math.abs(l.v))}</span></div>`).join('')}
+      <div class="stack-line"><b>Final payable</b><b class="num">${inr(r.payable)}</b></div>
+      ${r.cashback?`<div class="stack-line"><span>Cashback credited later</span><span class="num minus">−${inr(r.cashback)}</span></div><div class="stack-line"><b>Effective price after cashback</b><b class="num">${inr(r.effective)}</b></div>`:''}
+      <div class="stack-line total"><span>You save</span><span class="num" style="color:var(--green)">${inr(r.savings)}</span></div>
+      <p class="small muted">Savings are measured against the list price of ${inr(p.list)}.</p>
+      ${r.estimate?'<div class="warn-box">This result uses unverified offers, so treat it as an estimate.</div>':'<span class="badge b-ok" style="margin-top:8px">Verified offers only</span>'}
+      ${r.notes.map(n=>`<div class="warn-box">${esc(n)}</div>`).join('')}
+    </div></div>
+    <p class="note">Formula: Final price = product price + delivery − store discount − coupon − bank discount. Minimum spend is checked on the amount after earlier discounts. Offers are combined only when the bank offer's terms allow it with a coupon. Cashback is shown separately because it is paid after purchase.</p>`;
+}
+function offersPanel(p){
+  const keys = Object.keys(p.stores);
+  const cs = COUPONS.filter(c=>keys.includes(c.store)&&(c.cats==='all'||c.cats.includes(p.cat)));
+  const bs = BANKS.filter(b=>b.stores.some(s=>keys.includes(s)));
+  const emi = bs.filter(b=>b.type==='emi'&&!isExpired(b)), lo = lowest(p).price;
+  return `<h3>Coupons for this product</h3><div class="grid g4" style="margin:12px 0 24px">${cs.map(couponCard).join('')||'<div class="empty">No coupons found for this product.</div>'}</div>
+   <h3>Bank offers</h3><div class="grid g3" style="margin:12px 0 24px">${bs.filter(b=>b.type!=='emi').map(bankCard).join('')}</div>
+   <h3>EMI and no-cost EMI</h3>
+   ${emi.length?`<div class="scroll-x" style="margin-top:10px"><table><thead><tr><th>Bank</th><th>Type</th><th>Monthly instalment at ${inr(lo)}</th><th>Eligible</th></tr></thead><tbody>${emi.map(b=>`<tr><td>${b.bank}<br>${statusBadge(b)}</td><td>${b.kind==='noCostEmi'?'No-cost EMI':'EMI with interest'}</td><td class="num">${b.months.map(m=>{const rate=b.kind==='noCostEmi'?0:0.14/12; const emiAmt=rate?lo*rate/(1-Math.pow(1+rate,-m)):lo/m; return m+' mo: '+inr(emiAmt);}).join('<br>')}</td><td>${lo>=b.min?'<span class="badge b-ok">Yes</span>':'<span class="badge b-warn">Needs '+inr(b.min)+'</span>'}</td></tr>`).join('')}</tbody></table></div><p class="note">Instalments are estimates from the lowest price. Interest plans assume 14% a year. Check the bank's terms before choosing.</p>`:'<div class="empty" style="margin-top:10px">No EMI plans available for this product.</div>'}`;
+}
+function alertPanel(p){
+  const a = getAlerts()[p.id], lo = lowest(p).price, log = getHist().filter(h=>h.id===p.id);
+  return `<div class="grid g2"><div style="display:grid;gap:12px;align-content:start">
+    <div><label class="lbl" for="target">Target price (₹)</label><input class="field num" id="target" type="number" min="1" value="${a?a.target:Math.round(lo*0.95/10)*10}"></div>
+    <label class="row checks" style="flex-wrap:nowrap"><input type="checkbox" id="notify" ${!a||a.notify?'checked':''}> Notify me when the price reaches my target</label>
+    <div class="row"><button class="btn" data-act="setalert">${a?'Update alert':'Set price alert'}</button>${a?'<button class="btn ghost" data-act="rmalert">Remove from watchlist</button>':''}</div>
+    <p class="note">Alerts are saved in this browser. Real emails and browser push messages need the DISCOUNT backend and extension, which this page does not include. Demo prices don't change, so an alert fires only if your target is at or above today's lowest price of ${inr(lo)}.</p></div>
+    <div><h4>Alert history</h4>${log.length?`<ul style="padding-left:18px;margin:8px 0">${log.map(h=>`<li class="small">${esc(h.t)} — ${esc(h.msg)}</li>`).join('')}</ul>`:'<div class="empty" style="margin-top:8px">No alerts have fired for this product yet.</div>'}</div></div>`;
+}
+function viewProduct(id){
+  const p = P[id]; if(!p) return `<div class="empty" style="margin-block:40px"><b>Product not found.</b><p style="margin-top:8px"><a href="#search">Back to search</a></p></div>`;
+  const lo = lowest(p), wished = getWish().includes(p.id), h = history(p);
+  const allLo = Math.min(...h.map(x=>x.v)), allHi = Math.max(...h.map(x=>x.v));
+  const dp = dropVs30(p);
+  return `<div class="crumbs muted"><a href="#home">Home</a> › <a href="#search" data-act="cat" data-cat="${p.cat}">${p.cat}</a> › ${esc(p.name)}</div>
+  <section class="pd-top">
+    <div>${tile(p)}<div class="row" style="margin-top:12px">${demoBadge}<span class="badge b-info">Placeholder illustration</span></div></div>
+    <div style="display:grid;gap:14px">
+      <div><div class="muted small">${esc(p.brand)} · Model ${esc(p.model)}</div><h1 style="font-size:clamp(1.6rem,4vw,2.2rem);margin-top:4px">${esc(p.name)}</h1><div class="muted" style="margin-top:4px">${esc(p.variant)} · ${stars(p.rating)}</div></div>
+      <div><span class="pd-price num">${inr(lo.price)}</span> <span class="strike num">${inr(p.list)}</span> <span class="off">${discPct(p)}% off list</span>
+        <div class="small muted">Lowest available price, at ${lo.name}${dp>0?` · <span style="color:var(--green)">${dp}% below the 30-day average</span>`:''}</div></div>
+      <div class="row small"><span class="badge b-ok">All-time low ${inr(allLo)}</span><span class="badge b-info">All-time high ${inr(allHi)}</span><span class="muted">${h.length} days of history</span></div>
+      <p>${esc(p.desc)}</p>
+      <div class="row"><button class="btn" data-act="wish">${wished?'♥ In wishlist':'♡ Add to wishlist'}</button><button class="btn ghost" data-act="share">Share</button><button class="btn ghost" data-scroll="alert">Set price alert</button></div>
+      <dl class="kv panel" style="padding:14px">${Object.entries(p.specs).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+    </div>
+  </section>
+  <div class="subnav" role="navigation" aria-label="Sections">${[['compare','Compare prices'],['history','Price history'],['offers','Coupons and offers'],['calc','Final price calculator'],['alert','Price alert']].map(([k,n])=>`<button class="chip" data-scroll="${k}">${n}</button>`).join('')}</div>
+  <section class="section" id="compare"><h2 style="margin-bottom:14px">Compare prices ${demoBadge}</h2><div class="panel">${storeTable(p)}</div></section>
+  <section class="section" id="history" style="padding-top:8px"><h2 style="margin-bottom:14px">Price history</h2><div class="panel" id="histHost">${histPanel(p)}</div></section>
+  <section class="section" id="offers" style="padding-top:8px"><h2 style="margin-bottom:14px">Coupons and offers</h2>${offersPanel(p)}</section>
+  <section class="section" id="calc" style="padding-top:8px"><h2 style="margin-bottom:14px">Final price calculator</h2><div class="panel" id="calcHost">${calcPanel(p)}</div></section>
+  <section class="section" id="alert" style="padding-top:8px"><h2 style="margin-bottom:14px">Price alert</h2><div class="panel" id="alertHost">${alertPanel(p)}</div></section>`;
+}
+function viewCoupons(){
+  let list = COUPONS.filter(c=>{
+    const q = S.couponQ.toLowerCase();
+    if(q && !(STORES[c.store]+' '+c.code+' '+c.title).toLowerCase().includes(q)) return false;
+    if(S.couponCat && !(c.cats==='all'||c.cats.includes(S.couponCat))) return false;
+    if(S.couponType==='new' && !c.newUser) return false;
+    if(S.couponType && S.couponType!=='new' && c.type!==S.couponType) return false;
+    return true;
+  }).sort((a,b)=>isExpired(a)-isExpired(b));
+  return `<section class="section"><h1 style="font-size:2rem">Coupon finder</h1><p class="muted" style="margin:6px 0 18px">Each coupon shows whether it is verified, unverified or expired. ${demoBadge}</p>
+   <div class="row" style="margin-bottom:18px"><div class="grow" style="min-width:220px"><label class="lbl" for="cq">Search by brand or store</label><input class="field" id="cq" value="${esc(S.couponQ)}" placeholder="e.g. Myntra, FLIP10"></div>
+    <div><label class="lbl" for="ccat">Category</label><select class="field" id="ccat"><option value="">All</option>${ALL_CATS.map(c=>`<option ${S.couponCat===c?'selected':''}>${c}</option>`).join('')}</select></div>
+    <div><label class="lbl" for="ctype">Type</label><select class="field" id="ctype">${[['','All'],['new','New user'],['pct','Percentage'],['flat','Fixed amount'],['ship','Free delivery']].map(([v,n])=>`<option value="${v}" ${S.couponType===v?'selected':''}>${n}</option>`).join('')}</select></div></div>
+   ${list.length?`<div class="grid g4">${list.map(couponCard).join('')}</div>`:'<div class="empty">No coupons match your search.</div>'}</section>`;
+}
+function viewBanks(){
+  const banks = [...new Set(BANKS.map(b=>b.bank))];
+  const list = BANKS.filter(b=>!S.bankFilter||b.bank===S.bankFilter).sort((a,b)=>isExpired(a)-isExpired(b));
+  return `<section class="section"><h1 style="font-size:2rem">Bank offers</h1><p class="muted" style="margin:6px 0 18px">Offers are never assumed to combine. Combined savings are calculated only when an offer's terms allow it. ${demoBadge}</p>
+   <div class="row" style="margin-bottom:18px"><button class="chip" data-act="bank" data-v="" aria-pressed="${!S.bankFilter}">All banks</button>${banks.map(b=>`<button class="chip" data-act="bank" data-v="${b}" aria-pressed="${S.bankFilter===b}">${b}</button>`).join('')}</div>
+   <div class="grid g3">${list.map(bankCard).join('')}</div></section>`;
+}
+function viewWatchlist(){
+  const al = getAlerts(), wish = getWish(), log = getHist();
+  const watch = Object.keys(al).map(id=>P[id]).filter(Boolean);
+  return `<section class="section"><h1 style="font-size:2rem">Watchlist and alerts</h1><p class="muted" style="margin:6px 0 18px">Saved in this browser only.</p>
+   <h2 style="margin-bottom:12px">Price alerts</h2>
+   ${watch.length?`<div class="scroll-x panel" style="padding:6px"><table><thead><tr><th>Product</th><th>Target</th><th>Lowest now</th><th>Status</th><th>Notify</th><th></th></tr></thead><tbody>${watch.map(p=>{const a=al[p.id],lo=lowest(p).price;return `<tr><td><a href="#p-${p.id}">${esc(p.name)}</a></td><td class="num">${inr(a.target)}</td><td class="num">${inr(lo)}</td><td>${lo<=a.target?'<span class="badge b-ok">Target reached</span>':'<span class="badge b-info">Watching</span>'}</td><td>${a.notify?'On':'Off'}</td><td><button class="btn sm ghost" data-act="rmwatch" data-id="${p.id}">Remove</button></td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">You are not watching any products. Open a product and set a target price.</div>'}
+   <h2 style="margin:28px 0 12px">Wishlist</h2>
+   ${wish.length?`<div class="grid g4">${wish.map(id=>P[id]).filter(Boolean).map(productCard).join('')}</div>`:'<div class="empty">Your wishlist is empty.</div>'}
+   <h2 style="margin:28px 0 12px">Alert history</h2>
+   ${log.length?`<div class="panel"><ul style="margin:0;padding-left:18px">${log.map(h=>`<li>${esc(h.t)} — ${esc(h.msg)}</li>`).join('')}</ul></div>`:'<div class="empty">No alerts have fired yet.</div>'}</section>`;
+}
+const INFO = {
+ about:['About DISCOUNT','DISCOUNT helps shoppers in India compare prices across stores, check price history, find coupons and see the real amount they pay after bank offers. This page is a front-end demo of that idea. All data is sample data.'],
+ contact:['Contact','There is no contact form in this demo. When DISCOUNT launches, support details will be listed here.'],
+ privacy:['Privacy','This demo page stores your wishlist, alerts, recently viewed products and theme choice in your own browser. Nothing is sent to a server. DISCOUNT will never ask for store passwords or card numbers.'],
+ terms:['Terms','Prices, coupons and offers on this page are samples. They may not match any store and must not be used to make purchases. Real listings will show a last-updated time and a verification status.'],
+ help:['Help','Search by product name, brand, model or category, or paste a product link. Open a product to compare stores, view price history, check offers and run the final price calculator. Use Report expired on a coupon that no longer works.']
+};
+function viewInfo(k){ const [t,b] = INFO[k]||INFO.help; return `<section class="section" style="max-width:68ch"><h1 style="font-size:2rem;margin-bottom:12px">${t}</h1><p>${b}</p></section>`; }
+
+/* ---------- router ---------- */
+function route(){
+  const h = location.hash.slice(1) || 'home', app = $('#app');
+  let html, nav = h;
+  if(h.startsWith('p-')){ html = viewProduct(h.slice(2)); nav='search'; const id=h.slice(2); if(P[id]){ const r=getRecent().filter(x=>x!==id); r.unshift(id); store.set('recent', r.slice(0,8)); checkAlerts(P[id]); } }
+  else if(h==='search') html = viewSearch();
+  else if(h==='coupons') html = viewCoupons();
+  else if(h==='banks') html = viewBanks();
+  else if(h==='watchlist') html = viewWatchlist();
+  else if(h.startsWith('page-')){ html = viewInfo(h.slice(5)); nav=''; }
+  else html = viewHome();
+  app.innerHTML = html;
+  $('#nav').innerHTML = [['home','Home'],['search','Search'],['coupons','Coupons'],['banks','Bank offers'],['watchlist','Watchlist']].map(([k,n])=>`<a href="#${k}" ${nav===k?'aria-current="page"':''}>${n}</a>`).join('');
+  if(h.startsWith('p-')){ S.calc = {key:null,c:'',b:'',inc:false}; bindChart(); }
+  if(h==='home') bindSuggest($('#heroQ'), $('#heroSuggest'));
+  const target = S.scrollTo; S.scrollTo = null;
+  if(target && $('#'+target)) $('#'+target).scrollIntoView({behavior:'smooth', block:'start'}); else window.scrollTo(0,0);
+}
+function checkAlerts(p){
+  const a = getAlerts()[p.id]; if(!a||!a.notify||a.fired) return;
+  const lo = lowest(p).price;
+  if(lo <= a.target){ a.fired = true; const al = getAlerts(); al[p.id]=a; store.set('alerts', al);
+    const log = getHist(); log.unshift({id:p.id, t:fmtDate(new Date()), msg:`${p.name} reached ${inr(lo)} at ${lowest(p).name} (target ${inr(a.target)})`}); store.set('alertlog', log.slice(0,50));
+    toast(`Price alert: ${p.name} is now ${inr(lo)}`); }
+}
+
+/* ---------- chart interaction ---------- */
+function bindChart(){
+  const svg = $('#chartSvg'); if(!svg) return;
+  const p = P[location.hash.slice(3)], all = history(p), days = Math.min(S.range, all.length);
+  const pts = aggregate(all.slice(-days), S.gran);
+  const W=720,H=300,L=62,R=16,T=16,B=30, vals=pts.map(x=>x.v);
+  let mn=Math.min(...vals,lowest(p).price), mx=Math.max(...vals,lowest(p).price);
+  const step=(mx-mn)>20000?5000:(mx-mn)>5000?1000:(mx-mn)>1500?500:(mx-mn)>400?100:50; mn=Math.floor(mn/step)*step; mx=Math.ceil(mx/step)*step; if(mx===mn) mx=mn+step;
+  const hit=$('#hit'), xh=$('#xhair'), dot=$('#xdot'), tip=$('#tip');
+  const move = e => {
+    const r = svg.getBoundingClientRect(), cx = (e.touches?e.touches[0].clientX:e.clientX), sx = (cx-r.left)/r.width*W;
+    const i = Math.max(0, Math.min(pts.length-1, Math.round((sx-L)/(W-L-R)*(pts.length-1))));
+    const x = L+(pts.length===1?0:i/(pts.length-1))*(W-L-R), y = T+(1-(vals[i]-mn)/(mx-mn))*(H-T-B);
+    xh.setAttribute('x1',x); xh.setAttribute('x2',x); xh.setAttribute('visibility','visible');
+    dot.setAttribute('cx',x); dot.setAttribute('cy',y); dot.setAttribute('visibility','visible');
+    tip.hidden=false; tip.style.left=(x/W*100)+'%'; tip.style.top=(y/H*r.height)+'px'; tip.textContent=`${fmtDate(pts[i].d)} · ${inr(vals[i])}`;
+  };
+  const leave = () => { xh.setAttribute('visibility','hidden'); dot.setAttribute('visibility','hidden'); tip.hidden=true; };
+  hit.addEventListener('pointermove', move); hit.addEventListener('pointerleave', leave); hit.addEventListener('touchmove', move, {passive:true}); hit.addEventListener('touchend', leave);
+}
+
+/* ---------- autocomplete ---------- */
+function bindSuggest(input, box){
+  if(!input) return; let idx=-1, items=[];
+  const render = () => {
+    const q = input.value.trim().toLowerCase();
+    if(!q || /^https?:/.test(q)){ box.hidden=true; return; }
+    items = PRODUCTS.filter(p=>[p.name,p.brand,p.model,p.cat].join(' ').toLowerCase().includes(q)).slice(0,5);
+    box.hidden = !items.length; idx=-1;
+    box.innerHTML = items.map((p,i)=>`<button type="button" role="option" data-id="${p.id}"><span class="badge b-info">${p.cat}</span><span>${esc(p.name)}</span><span class="muted small" style="margin-left:auto">from ${inr(lowest(p).price)}</span></button>`).join('');
+  };
+  input.addEventListener('input', render);
+  input.addEventListener('keydown', e=>{
+    if(box.hidden) return; const bs=$$('button',box);
+    if(e.key==='ArrowDown'){ e.preventDefault(); idx=(idx+1)%bs.length; }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); idx=(idx-1+bs.length)%bs.length; }
+    else if(e.key==='Escape'){ box.hidden=true; return; }
+    else if(e.key==='Enter' && idx>=0){ e.preventDefault(); location.hash='p-'+bs[idx].dataset.id; return; }
+    else return;
+    bs.forEach((b,i)=>b.setAttribute('aria-selected', i===idx));
+  });
+  box.addEventListener('click', e=>{ const b=e.target.closest('button'); if(b) location.hash='p-'+b.dataset.id; });
+  document.addEventListener('click', e=>{ if(!box.contains(e.target)&&e.target!==input) box.hidden=true; });
+}
+function doSearch(q){ S.q=q; $('#barQ').value=q; if(location.hash==='#search') route(); else location.hash='search'; }
+
+/* ---------- events ---------- */
+document.addEventListener('submit', e=>{
+  if(e.target.id==='heroSearch'){ e.preventDefault(); doSearch($('#heroQ').value); }
+  if(e.target.id==='barSearch'){ e.preventDefault(); doSearch($('#barQ').value); }
+});
+document.addEventListener('click', e=>{
+  const sc = e.target.closest('[data-scroll]');
+  if(sc){ const k = sc.dataset.scroll, a = sc.closest('a'); if(a && a.getAttribute('href').slice(1)!==location.hash.slice(1)){ S.scrollTo=k; return; } e.preventDefault(); const t=$('#'+k); if(t) t.scrollIntoView({behavior:'smooth'}); return; }
+  const b = e.target.closest('[data-act]'); if(!b) return; const act=b.dataset.act, p = P[location.hash.slice(3)];
+  if(act==='quick'){ doSearch(b.dataset.q); }
+  else if(act==='all'){ S.q=''; S.f.cat=''; }
+  else if(act==='cat'){ e.preventDefault(); S.q=''; S.f.cat=b.dataset.cat; S.f.brands.clear(); S.f.stores.clear(); if(location.hash==='#search') route(); else location.hash='search'; }
+  else if(act==='clear'){ S.q=''; $('#barQ').value=''; S.f={min:'',max:'',brands:new Set(),stores:new Set(),rating:0,avail:false,cat:''}; route(); }
+  else if(act==='copy'){ copyText(b.dataset.code, 'Copied '+b.dataset.code); }
+  else if(act==='report'){ toast('Thanks. '+b.dataset.code+' is flagged for review. Reports are not sent anywhere in this demo.'); }
+  else if(act==='range'){ S.range=+b.dataset.v; $('#histHost').innerHTML=histPanel(p); bindChart(); }
+  else if(act==='gran'){ S.gran=+b.dataset.v; $('#histHost').innerHTML=histPanel(p); bindChart(); }
+  else if(act==='bank'){ S.bankFilter=b.dataset.v; route(); }
+  else if(act==='wish'){ let w=getWish(); w=w.includes(p.id)?w.filter(x=>x!==p.id):[p.id,...w]; store.set('wish',w); b.textContent = w.includes(p.id)?'♥ In wishlist':'♡ Add to wishlist'; toast(w.includes(p.id)?'Added to wishlist':'Removed from wishlist'); }
+  else if(act==='share'){ copyText(location.href, 'Product link copied'); }
+  else if(act==='autobest'){ const r=bestCombo(p,false); if(r){ S.calc={key:r.key,c:r.c?r.c.id:'',b:r.b?r.b.id:'',inc:false}; $('#calcHost').innerHTML=calcPanel(p); toast('Best verified combination applied'); } }
+  else if(act==='setalert'){ const t=+$('#target').value; if(!(t>0)){ toast('Enter a target price greater than zero.'); return; }
+    const al=getAlerts(); al[p.id]={target:t,notify:$('#notify').checked,created:Date.now()}; store.set('alerts',al); checkAlerts(p); $('#alertHost').innerHTML=alertPanel(p); toast('Alert set at '+inr(t)); }
+  else if(act==='rmalert'||act==='rmwatch'){ const id=b.dataset.id||p.id, al=getAlerts(); delete al[id]; store.set('alerts',al); toast('Removed from watchlist'); if(act==='rmwatch') route(); else $('#alertHost').innerHTML=alertPanel(p); }
+});
+document.addEventListener('change', e=>{
+  const t=e.target, id=t.id;
+  if(['fcat','fmin','fmax','frating','favail','sort'].includes(id) || t.dataset.f){
+    if(id==='fcat') S.f.cat=t.value; if(id==='fmin') S.f.min=t.value; if(id==='fmax') S.f.max=t.value; if(id==='frating') S.f.rating=+t.value; if(id==='favail') S.f.avail=t.checked; if(id==='sort') S.sort=t.value;
+    if(t.dataset.f==='brand') t.checked?S.f.brands.add(t.value):S.f.brands.delete(t.value);
+    if(t.dataset.f==='store') t.checked?S.f.stores.add(t.value):S.f.stores.delete(t.value);
+    route(); return; }
+  if(['cstore','ccoupon','cbank','cinc'].includes(id)){ const p=P[location.hash.slice(3)];
+    if(id==='cstore'){ S.calc.key=t.value; S.calc.c=''; S.calc.b=''; } if(id==='ccoupon') S.calc.c=t.value; if(id==='cbank') S.calc.b=t.value; if(id==='cinc') S.calc.inc=t.checked;
+    $('#calcHost').innerHTML=calcPanel(p); return; }
+  if(id==='ccat'){ S.couponCat=t.value; route(); } if(id==='ctype'){ S.couponType=t.value; route(); }
+});
+document.addEventListener('input', e=>{ if(e.target.id==='cq'){ S.couponQ=e.target.value; const pos=e.target.selectionStart; route(); const n=$('#cq'); n.focus(); n.setSelectionRange(pos,pos); } });
+window.addEventListener('hashchange', route);
+
+/* theme */
+(function(){
+  const saved = store.get('theme', null); if(saved) document.documentElement.dataset.theme = saved;
+  $('#themeBtn').addEventListener('click', ()=>{
+    const cur = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    const next = cur==='dark'?'light':'dark'; document.documentElement.dataset.theme=next; store.set('theme', next);
+  });
+})();
+bindSuggest($('#barQ'), (()=>{ const d=document.createElement('div'); d.className='suggest'; d.hidden=true; d.setAttribute('role','listbox'); $('#barSearch').appendChild(d); return d; })());
+route();
+</script>
+
+</body></html>
